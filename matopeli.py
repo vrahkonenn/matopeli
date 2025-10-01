@@ -90,6 +90,20 @@ class SnakeGame(QGraphicsView):
 
     def print_game(self):
         self.scene().clear()
+
+        for y in range(GRID_HEIGHT):
+            for x in range(GRID_WIDTH):
+                if (x + y) % 2 == 0:
+                    color = QColor("#31A84B")  # vaaleampi sävy
+                else:
+                    color = QColor("#2A9144")  # tummempi sävy
+                self.scene().addRect(
+                    x * CELL_SIZE, y * CELL_SIZE,
+                    CELL_SIZE, CELL_SIZE,
+                    QPen(Qt.NoPen), QBrush(color)
+                )
+
+
         fx, fy = self.food
         
         food_emoji = self.scene().addText("🍎", QFont("Segoe UI Emoji", CELL_SIZE/2))
@@ -112,6 +126,8 @@ class SnakeGame(QGraphicsView):
                 # Muut segmentit
                 self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))
         self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
+        
+        self.setWindowTitle(f'Score: {self.score}')
 
     def init_screen_game_over(self):
         start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
