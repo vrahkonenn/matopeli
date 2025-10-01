@@ -68,11 +68,6 @@ class SnakeGame(QGraphicsView):
         if new_head in self.snake or not (0 <= new_head[0] < GRID_WIDTH) or not (0 <= new_head[1] < GRID_HEIGHT):
             winsound.PlaySound("aanet\death.wav", winsound.SND_ASYNC | winsound.SND_ALIAS)
             self.timer.stop()
-            # Game over text
-            game_over_text = self.scene().addText("Game Over", QFont("Arial", 24))
-            text_width = game_over_text.boundingRect().width()
-            text_x = (self.width() - text_width) / 2
-            game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 3)
             self.game_started = False
             self.init_screen_game_over()
             return
@@ -122,20 +117,41 @@ class SnakeGame(QGraphicsView):
                     # Jos kuvaa ei löydy, piirrä varablokki
                     self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.darkGreen))
             else:
-                # Muut segmentit
                 self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#FFFFFF")), QBrush(QColor('#5BCF78')))
-        #self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
         
         self.setWindowTitle(f'Score: {self.score}')
 
     def init_screen_game_over(self):
-        start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
+
+        pixmap = QPixmap("./kuvat/game_over.jpg")  # Vaihda tiedostopolku oikeaksi
+        scaled_pixmap = pixmap.scaled(
+            int(self.sceneRect().width()),
+            int(self.sceneRect().height()),
+            Qt.IgnoreAspectRatio,           # Täyttää koko tilan, ei jätä tyhjää
+            Qt.SmoothTransformation         # Siisti skaalaus
+        )
+
+        self.scene().addPixmap(scaled_pixmap)
+        
+        start_text = self.scene().addText("Press any key to play again", QFont("Arial", 18))
+        start_text.setDefaultTextColor(Qt.white)  # tai mikä tahansa muu väri
         text_width = start_text.boundingRect().width()
         text_x = (self.width() - text_width)/2
-        start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
+        start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE) /2
 
     def init_screen(self):
+
+        pixmap = QPixmap("./kuvat/snake-is-mlg-edition.jpg")  # Vaihda tiedostopolku oikeaksi
+        scaled_pixmap = pixmap.scaled(
+            self.sceneRect().size().toSize(),
+            Qt.KeepAspectRatioByExpanding,
+            Qt.SmoothTransformation
+        )
+        
+        self.scene().addPixmap(scaled_pixmap)
+
         start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
+        start_text.setDefaultTextColor(Qt.white)  # tai mikä tahansa muu väri
         text_width = start_text.boundingRect().width()
         text_x = (self.width()/2 - text_width)
         start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
