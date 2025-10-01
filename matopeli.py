@@ -103,7 +103,6 @@ class SnakeGame(QGraphicsView):
                     QPen(Qt.NoPen), QBrush(color)
                 )
 
-
         fx, fy = self.food
         
         food_emoji = self.scene().addText("🍎", QFont("Segoe UI Emoji", CELL_SIZE/2))
@@ -124,8 +123,8 @@ class SnakeGame(QGraphicsView):
                     self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.darkGreen))
             else:
                 # Muut segmentit
-                self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))
-        self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
+                self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#FFFFFF")), QBrush(QColor('#5BCF78')))
+        #self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
         
         self.setWindowTitle(f'Score: {self.score}')
 
