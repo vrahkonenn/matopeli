@@ -2,7 +2,7 @@
 import sys
 import random
 from PySide6.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QMenu
-from PySide6.QtGui import QPainter, QPen, QBrush, QFont
+from PySide6.QtGui import QPainter, QPen, QBrush, QFont, QColor
 from PySide6.QtCore import Qt, QTimer
 import winsound
 
@@ -60,6 +60,11 @@ class SnakeGame(QGraphicsView):
         if new_head in self.snake or not (0 <= new_head[0] < GRID_WIDTH) or not (0 <= new_head[1] < GRID_HEIGHT):
             winsound.PlaySound("aanet\death.wav", winsound.SND_ASYNC | winsound.SND_ALIAS)
             self.timer.stop()
+            # Game over text
+            game_over_text = self.scene().addText("Game Over", QFont("Arial", 24))
+            text_width = game_over_text.boundingRect().width()
+            text_x = (self.width() - text_width) / 2
+            game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
             return
 
         self.snake.insert(0, new_head)
@@ -76,11 +81,11 @@ class SnakeGame(QGraphicsView):
     def print_game(self):
         self.scene().clear()
         fx, fy = self.food
-        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.black))
+        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.red), QBrush(Qt.red))
 
         for segment in self.snake:
             x, y = segment
-            self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.black))    
+            self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))    
             self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
 
     def start_game(self):
