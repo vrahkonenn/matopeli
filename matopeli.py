@@ -2,7 +2,7 @@
 import sys
 import random
 from PySide6.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QMenu
-from PySide6.QtGui import QPainter, QPen, QBrush, QFont
+from PySide6.QtGui import QPainter, QPen, QBrush, QFont, QColor
 from PySide6.QtCore import Qt, QTimer
 
 # vakiot
@@ -73,11 +73,11 @@ class SnakeGame(QGraphicsView):
     def print_game(self):
         self.scene().clear()
         fx, fy = self.food
-        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.black))
+        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.red), QBrush(Qt.red))
 
         for segment in self.snake:
             x, y = segment
-            self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.black))    
+            self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))    
             self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
 
     def start_game(self):
