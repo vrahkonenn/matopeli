@@ -4,6 +4,7 @@ import random
 from PySide6.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QMenu
 from PySide6.QtGui import QPainter, QPen, QBrush, QFont
 from PySide6.QtCore import Qt, QTimer
+import winsound
 
 # vakiot
 CELL_SIZE = 20
@@ -57,12 +58,14 @@ class SnakeGame(QGraphicsView):
 
         #pelialueen rajat
         if new_head in self.snake or not (0 <= new_head[0] < GRID_WIDTH) or not (0 <= new_head[1] < GRID_HEIGHT):
+            winsound.PlaySound("aanet\death.wav", winsound.SND_ASYNC | winsound.SND_ALIAS)
             self.timer.stop()
             return
 
         self.snake.insert(0, new_head)
         
         if new_head == self.food:
+            winsound.PlaySound("aanet\omnom.wav", winsound.SND_ASYNC | winsound.SND_ALIAS)
             self.food = self.spawn_food()
             self.score += 1
         else:
