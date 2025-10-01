@@ -21,9 +21,9 @@ class SnakeGame(QGraphicsView):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_game)
+        self.game_started = False
+        self.init_screen()
         
-        self.start_game()
-
     def keyPressEvent(self, event):
         key = event.key()
         if key in (Qt.Key_Left, Qt.Key_Right, Qt.Key_Up, Qt.Key_Down):
@@ -36,6 +36,14 @@ class SnakeGame(QGraphicsView):
                 self.direction = key
             elif key == Qt.Key_Down and self.direction != Qt.Key_Up:
                 self.direction = key
+
+            # starting game by button
+        if not self.game_started:
+            if key == event.key() and event.key() != Qt.Key_Left and event.key() != Qt.Key_Up and event.key() != Qt.Key_Right and event.key() != Qt.Key_Down:
+                self.game_started = True
+                self.scene().clear()
+                self.start_game()
+
 
     def spawn_food(self):
         while True:
@@ -64,7 +72,9 @@ class SnakeGame(QGraphicsView):
             game_over_text = self.scene().addText("Game Over", QFont("Arial", 24))
             text_width = game_over_text.boundingRect().width()
             text_x = (self.width() - text_width) / 2
-            game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
+            game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 3)
+            self.game_started = False
+            self.init_screen_game_over()
             return
 
         self.snake.insert(0, new_head)
@@ -87,6 +97,19 @@ class SnakeGame(QGraphicsView):
             x, y = segment
             self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))    
             self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
+
+    def init_screen_game_over(self):
+        start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
+        text_width = start_text.boundingRect().width()
+        text_x = (self.width() - text_width)/2
+        start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
+
+    def init_screen(self):
+        start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
+        text_width = start_text.boundingRect().width()
+        text_x = (self.width()/2 - text_width)
+        start_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
+
 
     def start_game(self):
         self.direction = Qt.Key_Right
