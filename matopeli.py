@@ -58,6 +58,11 @@ class SnakeGame(QGraphicsView):
         #pelialueen rajat
         if new_head in self.snake or not (0 <= new_head[0] < GRID_WIDTH) or not (0 <= new_head[1] < GRID_HEIGHT):
             self.timer.stop()
+            # Game over text
+            game_over_text = self.scene().addText("Game Over", QFont("Arial", 24))
+            text_width = game_over_text.boundingRect().width()
+            text_x = (self.width() - text_width) / 2
+            game_over_text.setPos(text_x, GRID_HEIGHT * CELL_SIZE / 2)
             return
 
         self.snake.insert(0, new_head)
