@@ -60,8 +60,10 @@ class SnakeGame(QGraphicsView):
         if new_head == self.food:
             self.food = self.spawn_food()
             self.score += 1
+        else:
+            self.snake.pop()
 
-        self.snake.pop()
+
 
         self.print_game()
 
