@@ -1,8 +1,8 @@
 # 'pip install PySide6' tarvitaan 
 import sys
 import random
-from PySide6.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QMenu
-from PySide6.QtGui import QPainter, QPen, QBrush, QFont, QColor
+from PySide6.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QMenu, QGraphicsPixmapItem
+from PySide6.QtGui import QPainter, QPen, QBrush, QFont, QColor, QPixmap
 from PySide6.QtCore import Qt, QTimer
 import winsound
 
@@ -91,12 +91,27 @@ class SnakeGame(QGraphicsView):
     def print_game(self):
         self.scene().clear()
         fx, fy = self.food
-        self.scene().addRect(fx * CELL_SIZE, fy * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.red), QBrush(Qt.red))
+        
+        food_emoji = self.scene().addText("🍎", QFont("Segoe UI Emoji", CELL_SIZE/2))
+        food_emoji.setPos(fx * CELL_SIZE, fy * CELL_SIZE - CELL_SIZE // 4)
 
-        for segment in self.snake:
+        for i, segment in enumerate(self.snake):
             x, y = segment
-            self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))    
-            self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
+            if i == 0:
+                # Madon pää kuvalla
+                pixmap = QPixmap("kuvat/emoji.webp")
+                if not pixmap.isNull():
+                    pixmap = pixmap.scaled(CELL_SIZE, CELL_SIZE)
+                    item = QGraphicsPixmapItem(pixmap)
+                    item.setPos(x * CELL_SIZE, y * CELL_SIZE)
+                    self.scene().addItem(item)
+                else:
+                    # Jos kuvaa ei löydy, piirrä varablokki
+                    self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(Qt.black), QBrush(Qt.darkGreen))
+            else:
+                # Muut segmentit
+                self.scene().addRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, QPen(QColor("#429658")), QBrush(QColor('#5BCF78')))
+        self.scene().addText(f'Score: {self.score}', QFont("Arial", 12))
 
     def init_screen_game_over(self):
         start_text = self.scene().addText("Press any key to start", QFont("Arial", 18))
